@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\admin\AdminController;
+use App\Http\Controllers\client\ClientController;
+use App\Http\Controllers\user\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,4 +18,15 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('Accueil.index');
+})->name('accueil');
+
+Route::post('/user/login', [UserController::class, 'authLogin'])->name('user.login');
+Route::post('/user/register', [UserController::class, 'userRegister'])->name('user.register');
+
+Route::middleware(['auth'])->group( function() {
+    Route::get('/client/dashboard', [ClientController::class, 'clientDashboard'])->name('homePage');
+    Route::get('/admin/dashboard', [AdminController::class, 'adminDashboard'])->name('adminPage');
+    Route::post('/user/logout', [UserController::class, 'userLogout'])->name('user.logout');
 });
+
+
